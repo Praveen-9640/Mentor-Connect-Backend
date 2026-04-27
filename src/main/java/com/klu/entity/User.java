@@ -23,7 +23,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role;   // ❗ NOT NULL
+    private Role role;
 
     private String subject;
 

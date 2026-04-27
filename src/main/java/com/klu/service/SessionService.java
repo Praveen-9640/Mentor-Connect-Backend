@@ -14,6 +14,18 @@ public class SessionService {
     private SessionRepository repo;
 
     public Session book(Session session) {
+
+        List<Session> overlapping = repo.findOverlappingSessions(
+                session.getMentee().getId(),
+                session.getMentor().getId(),
+                session.getStartTime(),
+                session.getEndTime()
+        );
+
+        if (!overlapping.isEmpty()) {
+            throw new RuntimeException("This time slot is already booked for either the mentee or mentor.");
+        }
+
         session.setStatus("BOOKED");
         return repo.save(session);
     }

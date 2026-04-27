@@ -26,12 +26,12 @@ public class SecurityConfig {
 		return new BCryptPasswordEncoder();
 	}
 
-	// ✅ CORS CONFIG
+
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration config = new CorsConfiguration();
 
-		config.setAllowedOrigins(List.of("*")); // allow all (for now)
+		config.setAllowedOrigins(List.of("*"));
 		config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 		config.setAllowedHeaders(List.of("*"));
 		config.setAllowCredentials(false);
@@ -42,11 +42,11 @@ public class SecurityConfig {
 		return source;
 	}
 
-	// ✅ SECURITY CONFIG
+
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.cors(cors -> {
-		}) // 🔥 IMPORTANT (enable CORS)
+		})
 				.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()

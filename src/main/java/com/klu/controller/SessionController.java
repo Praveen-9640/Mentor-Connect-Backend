@@ -23,9 +23,13 @@ public class SessionController {
     private ModelMapper modelMapper;
 
     @PostMapping("/book")
-    public SessionDTO book(@RequestBody Session session) {
-        Session saved = service.book(session);
-        return modelMapper.map(saved, SessionDTO.class);
+    public org.springframework.http.ResponseEntity<?> book(@RequestBody Session session) {
+        try {
+            Session saved = service.book(session);
+            return org.springframework.http.ResponseEntity.ok(modelMapper.map(saved, SessionDTO.class));
+        } catch (RuntimeException e) {
+            return org.springframework.http.ResponseEntity.badRequest().body(java.util.Collections.singletonMap("error", e.getMessage()));
+        }
     }
 
     @GetMapping

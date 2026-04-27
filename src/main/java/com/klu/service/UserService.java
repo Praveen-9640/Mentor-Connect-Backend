@@ -22,7 +22,7 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
-        // Delete all sessions associated with this user first to prevent foreign key errors
+
         List<Session> sessions = sessionRepo.findAll();
         for (Session session : sessions) {
             if ((session.getMentee() != null && session.getMentee().getId().equals(id)) ||

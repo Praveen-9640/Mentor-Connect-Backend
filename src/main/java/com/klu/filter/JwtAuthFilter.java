@@ -37,7 +37,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             
-            // Assume the token is valid for the sake of assignment requirement (basic JWT)
+
             if (jwtUtil.validateToken(token, email)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         email, null, new ArrayList<>());
