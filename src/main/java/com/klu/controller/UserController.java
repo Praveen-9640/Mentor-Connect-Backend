@@ -1,5 +1,6 @@
 package com.klu.controller;
 
+import com.klu.dto.StatsDTO;
 import com.klu.dto.UserDTO;
 import com.klu.entity.User;
 import com.klu.service.UserService;
@@ -11,8 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/users")
-@CrossOrigin
+@RequestMapping("/api")
 public class UserController {
 
     @Autowired
@@ -21,15 +21,20 @@ public class UserController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @GetMapping
-    public List<UserDTO> getUsers() {
-        return service.getAllUsers().stream()
+    @GetMapping("/users")
+    public List<UserDTO> getUsers(@RequestParam(required = false) String role) {
+        return service.getUsers(role).stream()
                 .map(user -> modelMapper.map(user, UserDTO.class))
                 .collect(Collectors.toList());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/users/{id}")
     public void deleteUser(@PathVariable Long id) {
         service.deleteUser(id);
+    }
+
+    @GetMapping("/stats")
+    public StatsDTO getStats() {
+        return service.getStats();
     }
 }

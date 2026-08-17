@@ -2,6 +2,7 @@ package com.klu.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,7 +27,6 @@ public class SecurityConfig {
 		return new BCryptPasswordEncoder();
 	}
 
-
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration config = new CorsConfiguration();
@@ -42,22 +42,23 @@ public class SecurityConfig {
 		return source;
 	}
 
-
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.cors(cors -> {
 		})
 				.csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-    .requestMatchers(
-        "/api/auth/**",
-        "/api/sessions/**",
-        "/swagger-ui/**",
-        "/v3/api-docs/**"
-    ).permitAll()
-    .anyRequest().authenticated()
-)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+				.authorizeHttpRequests(auth -> auth
+						.requestMatchers(
+								"/api/auth/**",
+								"/api/stats",
+								"/swagger-ui/**",
+								"/v3/api-docs/**"
+						).permitAll()
+						.requestMatchers(HttpMethod.GET, "/api/users/**").authenticated()
+						.requestMatchers(HttpMethod.DELETE, "/api/users/**").hasRole("ADMIN")
+						.anyRequest().authenticated()
+				)
+				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}
